@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
   username: String,
   password: String,
   token: String,
-  createdAt: { type: Date, default: Date.now() },
+  createdAt: { type: Date, default: Date.now },
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'restaurants' }],
   quests: [questSchema],
   quizResults: [quizSchema],
