@@ -49,12 +49,33 @@ Res = tous les quiz
 
 ### Route pour se connecter + récupérer les informations de l'utilisateur : username, email, favorites, token (pour LoginScreen)
 
-POST /users/login
-Req.body = email, password
-Traitement: vérification des informations, calcul du niveau/level (en fonction de quizResults) et du totalSavedCo2 (en fonction de history) de l'utilisateur
-Res = en fonction du result =>
-true = username, email, token, favorites, totalSavedCo2, level
-false = message d'erreur
+`POST /users/login`
+
+**Body**: `email`| `password`
+
+**Response**:
+
+```
+{
+    result: boolean,
+    data: {
+        firstConnection: boolean,
+        username: string,
+        email: string,
+        token: string,
+        level: string,
+        totalSavedCo2: number,
+        favorites: array
+    }
+}
+```
+
+**Erreurs**
+
+- 400 fields missing: []
+- 400 user not found
+- 401 invalid password
+- 500 internal servor error
 
 ## historyRouter ('/history') -- Morgan
 
