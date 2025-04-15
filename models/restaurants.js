@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const coordinatesSchema = mongoose.Schema({
-    longitude: Number,
-    latitude: Number
-});
+  latitude: Number,
+  longitude: Number,
+}, { _id: false });
 
 const restaurantSchema = mongoose.Schema({
   name: String,
