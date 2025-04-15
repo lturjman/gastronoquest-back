@@ -1,7 +1,7 @@
 # Routes
 
 
-## indexRouter ('/')
+## indexRouter ('/') -- Laura
 (Routes pour récupérer les données en dur)
 
 ### Récupérer les défis (sur RestaurantScreen)
@@ -15,7 +15,7 @@ Pas de req
 Res = tous les quiz
 
 
-## usersRouter ('/users')
+## usersRouter ('/users') -- Nathan
 
 ### Route pour s'inscrire (pour RegisterScreen)
 POST /users/register
@@ -34,7 +34,7 @@ Res = en fonction du result =>
     false = message d'erreur
 
 
-## historyRouter ('/history')
+## historyRouter ('/history') -- Morgan
 
 ### Récupérer l'historique des quêtes de l'utilisateur (pour HistoryScreen)
 GET /history
@@ -47,7 +47,7 @@ Req.body = token, id du restaurant, id des défis validés, date de validation
 Res = result
 
 
-## quizResultsRouter ('/quizResults')
+## quizResultsRouter ('/quizResults') -- Nathan
 
 ### Récupérer les résultats aux quiz de l'utilisateur (pour QuizScreen)
 GET /quizResults
@@ -60,7 +60,7 @@ Req.body = token, id du quiz, id des défis validés, date de validation
 Res = result
 
 
-## favoritesRouter ('/favorites')
+## favoritesRouter ('/favorites') -- Laura
 
 ### Route pour ajouter un restaurant aux favoris
 POST /favorites
@@ -75,7 +75,7 @@ Traitement : Mettre à jour User
 Res = result
 
 
-## searchRouter ('/search')
+## searchRouter ('/search') -- Morgan
 
 ### Routes pour afficher les restaurants trouvés en fonction des différents filtres de recherche et du "niveau de zoom" de la carte
 - Route de recherche d'un restaurant par son nom
