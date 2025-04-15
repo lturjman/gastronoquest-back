@@ -14,6 +14,7 @@ const quizSchema = mongoose.Schema({
 
 const userSchema = mongoose.Schema({
   username: String,
+  email: String,
   password: String,
   token: String,
   createdAt: { type: Date, default: Date.now },
