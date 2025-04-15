@@ -7,7 +7,7 @@ const questionSchema = mongoose.Schema({
     rightAnswer: String,
     comment: String,
     articleUrl: String
-});
+}, { _id: false });
 
 const quizSchema = mongoose.Schema({
   quizNumber: Number,
@@ -16,6 +16,6 @@ const quizSchema = mongoose.Schema({
   questions: [questionSchema],
 });
 
-const Quiz = mongoose.model('quiz', quizSchema);
+const Quiz = mongoose.model('quizzes', quizSchema);
 
 module.exports = Quiz;
