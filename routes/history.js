@@ -2,14 +2,17 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('../models/users');
+const { validateFields } = require("../middlewares/validateFields");
 const { calculateUserCo2Saved } = require("../services/calculateUserCo2Saved");
 
 
 // GET /history : Récupérer l'historique des quêtes de l'utilisateur (pour HistoryScreen)
 
-router.get('/:token', async (req, res) => {
+router.get('/', 
+  validateFields(["authorization"], "headers"),
+  async (req, res) => {
   try {
-    const { token } = req.params;
+    const { token } = req.headers.authorization;
 
     const user = await User.findOne({ token })
     .select('quests -_id')
@@ -32,9 +35,13 @@ router.get('/:token', async (req, res) => {
 
 // POST /history : Mettre à jour l'historique après validation d'une quête (pour RestaurantScreen)
 
-router.post('/', async (req, res) => {
+router.post('/',
+  validateFields(["authorization"], "headers"),
+  validateFields(["restaurant", "achievedChallenges"], "body"),
+  async (req, res) => {
   try {
-    const { token, restaurant, achievedChallenges } = req.body;
+    const { token } = req.headers.authorization;
+    const { restaurant, achievedChallenges } = req.body;
     const quest = { restaurant, achievedChallenges, date: new Date() };
 
     // Ajout de la quête à l'historique de l'utilisateur
