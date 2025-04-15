@@ -70,7 +70,9 @@ router.post(
       const { email, password } = req.body;
 
       // Vérifier si l'utilisateur existe
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ email }).populate(
+        "quests.achievedChallenges"
+      );
       if (!user) {
         return res.status(400).json({ result: false, error: "user not found" });
       }
