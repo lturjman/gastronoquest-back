@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/users");
 const { validateFields } = require("../middlewares/validateFields");
+const { calculateUserLevel } = require("../services/calculateUserLevel");
+const { calculateUserCo2Saved } = require("../services/calculateUserCo2Saved");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 
@@ -45,12 +47,61 @@ router.post(
         username,
         email,
         token,
-        level: "Jeune pousse",
+        level: "jeune pousse",
         totalSavedCo2: 0,
         favorites: [],
       };
 
       res.status(201).json({ result: true, data });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ result: false, error: "internal servor error" });
+    }
+  }
+);
+
+// Connexion
+// Utilisation d'un middleware pour vérifier les champs nécessaires
+router.post(
+  "/login",
+  validateFields(["email", "password"], "body"),
+  async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      // Vérifier si l'utilisateur existe
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ result: false, error: "user not found" });
+      }
+
+      // Comparaison du mot de passe
+      const isCorrectPassword = await bcrypt.compare(password, user.password);
+
+      if (!isCorrectPassword) {
+        return res
+          .status(401)
+          .json({ result: false, error: "invalid password" });
+      }
+
+      // Récupération des informations de l'utilisateur
+      // Calcul du niveau de l'utilisateur et du CO2 économisé
+      const { username, token, favorites, quizResults, quests } = user;
+      const level = calculateUserLevel(quizResults);
+      const totalSavedCo2 = calculateUserCo2Saved(quests);
+
+      // Préparation des données à retourner
+      const data = {
+        firstConnection: false,
+        username,
+        email,
+        token,
+        level,
+        totalSavedCo2,
+        favorites,
+      };
+
+      res.json({ result: true, data });
     } catch (error) {
       console.error(error);
       res.status(500).json({ result: false, error: "internal servor error" });
