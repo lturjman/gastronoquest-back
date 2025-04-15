@@ -6,17 +6,8 @@ const Restaurant = require('../models/restaurants');
 const { constructQuery } = require("../services/constructQuery");
 
 
-/*
-### Routes pour afficher les restaurants trouvés en fonction des différents filtres de recherche et du "niveau de zoom" de la carte
-- Route de recherche d'un restaurant par son nom
-- Route de recherche d'un restaurant par ses coordonnées
-Récupérer ce qu'on a fait sur autocomplete pour ça
-*/
-
-
-
-
 // Peut-être que ce sera plus intelligent de fusionner /restaurant et /address dans une seule route et de rajouter une valeur dans req.body pour savoir de quel type de recherche il s'agit
+// Intégrer le autocomplete et voir comment ça adapte les requêtes
 
 
 // POST /search/restaurant : chercher un restaurant par son nom (name) et les filtres de recherche
@@ -70,7 +61,7 @@ router.post('/address', async (req, res) => {
 
 
 // POST /search/city : chercher un restaurant par sa ville (coordinates)
-// #todo Implémentation des filtres
+
 router.post('/city', async (req, res) => {
   try {
     if (req.body.input.length < 3) {   // Blocage si la longueur de l'input est inférieure à 3
