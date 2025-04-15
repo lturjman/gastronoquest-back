@@ -13,7 +13,7 @@ router.get("/challenges", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       result: false,
-      message: "Erreur lors de la récupération des challenges",
+      message: "Error retrieving challenges",
       error,
     });
   }
@@ -30,7 +30,7 @@ router.get("/quiz", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       result: false,
-      message: "Erreur lors de la récupération des quiz",
+      message: "Error retrieving quizzes",
       error,
     });
   }
