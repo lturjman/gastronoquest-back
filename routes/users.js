@@ -55,7 +55,7 @@ router.post(
       res.status(201).json({ result: true, data });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ result: false, error: "internal servor error" });
+      res.status(500).json({ result: false, error: "internal server error" });
     }
   }
 );
@@ -106,7 +106,7 @@ router.post(
       res.json({ result: true, data });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ result: false, error: "internal servor error" });
+      res.status(500).json({ result: false, error: "internal server error" });
     }
   }
 );

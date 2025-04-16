@@ -16,7 +16,6 @@ GET /quiz
 Pas de req
 Res = tous les quiz
 
-
 ## usersRouter ('/users') -- Nathan
 
 ### Route pour s'inscrire (pour RegisterScreen)
@@ -46,7 +45,7 @@ Res = tous les quiz
 
 - 400 fields missing: []
 - 400 email already used
-- 500 internal servor error
+- 500 internal server error
 
 ### Route pour se connecter et récupérer les informations de l'utilisateur (pour LoginScreen)
 
@@ -76,8 +75,7 @@ Res = tous les quiz
 - 400 fields missing: []
 - 400 user not found
 - 401 invalid password
-- 500 internal servor error
-
+- 500 internal server error
 
 ## historyRouter ('/history') -- Morgan
 
@@ -102,7 +100,6 @@ Res = tous les quiz
 
 - 500 internal server error
 
-
 ### Route pour mettre à jour l'historique après validation d'une quête (pour RestaurantScreen)
 
 `POST /history`
@@ -122,20 +119,68 @@ Res = tous les quiz
 
 - 500 internal server error
 
-
 ## quizResultsRouter ('/quizResults') -- Nathan
 
 ### Récupérer les résultats aux quiz de l'utilisateur (pour QuizScreen)
 
-GET /quizResults
-Req.params = token
-Res = quizResults
+`GET /quizResults/`
+
+**Headers:** `token`
+
+**Response:**
+
+```
+{
+    result: boolean,
+    data: [
+        {
+            quiz_id: ObjectId,
+            score: Number,
+            passed: Boolean,
+            passedAt: Date,
+        }
+    ]
+}
+```
+
+**Errors:**
+
+- 400 fields missing: token
+- 400 user not found
+- 500 internal server error
 
 ### Mettre à jour les résultats aux quiz après avoir fini un quiz (pour QuestionScreen)
 
-PUT /quizResults
-Req.body = token, id du quiz, id des défis validés, date de validation
-Res = result
+`PUT /quizResults/`
+
+**Headers:** `token`
+
+**Body:** `quizId` | `score` | `passed`
+
+**Response:**
+
+Renvoie la liste actualisée
+
+```
+{
+    result: boolean,
+    data: [
+        {
+            quiz_id: ObjectId,
+            score: Number,
+            passed: Boolean,
+            passedAt: Date,
+        }
+    ]
+}
+```
+
+**Errors:**
+
+- 400 fields missing: []
+- 400 user not found
+- 400 quiz not found
+- 500 internal server error
 
 ## favoritesRouter ('/favorites') -- Laura
 
@@ -152,7 +197,6 @@ DELETE /favorites
 Req.body = id du restaurant
 Traitement : Mettre à jour User
 Res = result
-
 
 ## searchRouter ('/search') -- Morgan
 
