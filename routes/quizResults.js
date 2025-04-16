@@ -5,29 +5,33 @@ const Quiz = require("../models/quizzes");
 const { validateFields } = require("../middlewares/validateFields");
 
 // Route pour récupérer les résultats aux quizz d'un utilisateur
-router.get("/", validateFields(["token"], "headers"), async (req, res) => {
-  try {
-    // Récupération du token et recherche de l'utilisateur en bdd
-    const { token } = req.headers;
-    const user = await User.findOne({ token });
+router.get(
+  "/",
+  validateFields(["authorization"], "headers"),
+  async (req, res) => {
+    try {
+      // Récupération du token et recherche de l'utilisateur en bdd
+      const { token } = req.headers;
+      const user = await User.findOne({ token });
 
-    // Répondre une erreur si aucun utilisateur trouvé
-    if (!user) {
-      return res.status(400).json({ result: false, error: "user not found" });
+      // Répondre une erreur si aucun utilisateur trouvé
+      if (!user) {
+        return res.status(400).json({ result: false, error: "user not found" });
+      }
+
+      // Envoi des résultats
+      res.json({ result: true, data: user.quizResults });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ result: false, error: "internal server error" });
     }
-
-    // Envoi des résultats
-    res.json({ result: true, data: user.quizResults });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ result: false, error: "internal server error" });
   }
-});
+);
 
 // Route pour mettre à jour les résultats aux quizz après avoir terminé un quiz
 router.put(
   "/",
-  validateFields(["token"], "headers"),
+  validateFields(["authorization"], "headers"),
   validateFields(["quizId", "score", "passed"], "body"),
   async (req, res) => {
     try {
@@ -58,12 +62,12 @@ router.put(
       const newQuizResults = [...user.quizResults, newQuizResult];
 
       // Mise à jour des résultats de quizz
-      const res = await User.updateOne(
+      const result = await User.updateOne(
         { token },
         { quizResults: newQuizResults }
       );
 
-      if (res.modifiedCount === 1) {
+      if (result.modifiedCount === 1) {
         // Renvoie la nouvelle liste de résultats
         res.json({ result: true, data: newQuizResults });
       } else {
