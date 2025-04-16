@@ -16,15 +16,16 @@ GET /quiz
 Pas de req
 Res = tous les quiz
 
+
 ## usersRouter ('/users') -- Nathan
 
 ### Route pour s'inscrire (pour RegisterScreen)
 
 `POST /users/register`
 
-**Body**: `username` | `email`| `password`
+**Body:** `username` | `email` | `password`
 
-**Response**:
+**Response:**
 
 ```
 {
@@ -41,19 +42,19 @@ Res = tous les quiz
 }
 ```
 
-**Erreurs**
+**Errors:**
 
 - 400 fields missing: []
 - 400 email already used
 - 500 internal servor error
 
-### Route pour se connecter + récupérer les informations de l'utilisateur : username, email, favorites, token (pour LoginScreen)
+### Route pour se connecter et récupérer les informations de l'utilisateur (pour LoginScreen)
 
 `POST /users/login`
 
-**Body**: `email`| `password`
+**Body:** `email`| `password`
 
-**Response**:
+**Response:**
 
 ```
 {
@@ -70,26 +71,57 @@ Res = tous les quiz
 }
 ```
 
-**Erreurs**
+**Errors:**
 
 - 400 fields missing: []
 - 400 user not found
 - 401 invalid password
 - 500 internal servor error
 
+
 ## historyRouter ('/history') -- Morgan
 
-### Récupérer l'historique des quêtes de l'utilisateur (pour HistoryScreen)
+### Route pour récupérer l'historique des quêtes de l'utilisateur (pour HistoryScreen)
 
-GET /history
-Req.params = token
-Res = history
+`GET /history`
 
-### Mettre à jour l'historique après validation d'une quête (pour RestaurantScreen)
+**Response:**
 
-PUT /history
-Req.body = token, id du restaurant, id des défis validés, date de validation
-Res = result
+```
+{
+    result: boolean,
+    data: [{
+        restaurant: ObjectId,
+        savedCo2: Number,
+        achievedChallenges: [ObjectId]
+    }]
+}
+```
+
+**Errors:**
+
+- 500 internal server error
+
+
+### Route pour mettre à jour l'historique après validation d'une quête (pour RestaurantScreen)
+
+`POST /history`
+
+**Body:** `restaurant` (ObjectId) | `achievedChallenges` ([ObjectId])
+
+**Response:**
+
+```
+{
+    result: Boolean,
+    totalSavedCo2: Number
+}
+```
+
+**Errors:**
+
+- 500 internal server error
+
 
 ## quizResultsRouter ('/quizResults') -- Nathan
 
@@ -121,13 +153,9 @@ Req.body = id du restaurant
 Traitement : Mettre à jour User
 Res = result
 
+
 ## searchRouter ('/search') -- Morgan
 
-### Routes pour afficher les restaurants trouvés en fonction des différents filtres de recherche et du "niveau de zoom" de la carte
+Routes pour afficher les restaurants trouvés en fonction des différents filtres de recherche et du "niveau de zoom" de la carte
 
-- Route de recherche d'un restaurant par son nom
-- Route de recherche d'un restaurant par ses coordonnées
-  Il va falloir qu'on fasse des appels à l'API data géo pour convertir les villes en coordonnées et inversement
-  Récupérer ce qu'on a fait sur autocomplete pour ça
-
-NOTE: A priori pas besoin d'une route pour récupérer les informations d'un restaurant en particulier, on peut communiquer ça dans le frontend
+**A documenter**
