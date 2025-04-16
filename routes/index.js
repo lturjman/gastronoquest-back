@@ -20,7 +20,7 @@ router.get("/challenges", async (req, res) => {
 });
 
 // QUIZ
-const Quiz = require("../models/quiz");
+const Quiz = require("../models/quizzes");
 
 // Route GET pour récupérer tous les quiz
 router.get("/quiz", async (req, res) => {
