@@ -125,7 +125,7 @@ Res = tous les quiz
 
 `GET /quizResults/`
 
-**Headers:** `token`
+**Headers:** `authorization`
 
 **Response:**
 
@@ -153,7 +153,7 @@ Res = tous les quiz
 
 `PUT /quizResults/`
 
-**Headers:** `token`
+**Headers:** `authorization` (token)
 
 **Body:** `quizId` | `score` | `passed`
 
