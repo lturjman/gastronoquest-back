@@ -104,7 +104,14 @@ Res = tous les quiz
 
 `POST /history`
 
-**Body:** `restaurant` (ObjectId) | `achievedChallenges` ([ObjectId])
+**Body:**
+
+```
+{
+    restaurant: ObjectId,
+    achievedChallenges: [ObjectId]
+}
+```
 
 **Response:**
 
@@ -131,7 +138,7 @@ Res = tous les quiz
 
 ```
 {
-    result: boolean,
+    result: Boolean,
     data: [
         {
             quiz_id: ObjectId,
@@ -163,7 +170,7 @@ Renvoie la liste actualisée
 
 ```
 {
-    result: boolean,
+    result: Boolean,
     data: [
         {
             quiz_id: ObjectId,
@@ -203,3 +210,32 @@ Res = result
 Routes pour afficher les restaurants trouvés en fonction des différents filtres de recherche et du "niveau de zoom" de la carte
 
 **A documenter**
+
+
+**Response:**
+
+```
+{
+    result: Boolean,
+    data: [
+        {
+            _id: ObjectId,
+            name: String,
+            desc: String,
+            longDesc: String,
+            score: Number,
+            badges: [String],
+            types: [String],
+            priceRange: String,
+            address: String,
+            coordinates: {
+                latitude: Number,
+                longitude: Number,
+            },
+            imageUrl: String,
+            websiteUrl: String,
+            bookingUrl: String
+        }
+    ]
+}
+```
