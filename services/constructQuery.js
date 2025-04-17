@@ -7,7 +7,7 @@ const constructQuery = (reqBody) => {
     if (name) query.name = { $regex: new RegExp(name, "i") };
     if (address) query.address = new RegExp(`\\b${address}$`, "i");
 
-    if (priceRange) query.priceRange = priceRange;
+    if (priceRange && priceRange !== "Tous les prix") query.priceRange = priceRange;
     if (badges) query.badges = { $in: badges };
     if (types) query.types = { $in: types };
 

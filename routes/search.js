@@ -20,7 +20,7 @@ router.post('/restaurant', async (req, res) => {
     }
 
     const query = constructQuery(req.body);
-    const restaurants = await Restaurant.find(query).select("-_id -__v");
+    const restaurants = await Restaurant.find(query).select("-__v");
 
     if (restaurants.length === 0) {
       res.status(200).json({ result: false });
@@ -45,7 +45,7 @@ router.post('/address', async (req, res) => {
     }
 
     const query = constructQuery(req.body);
-    const restaurants = await Restaurant.find(query).select("-_id -__v");
+    const restaurants = await Restaurant.find(query).select("-__v");
 
     if (restaurants.length === 0) {
       res.status(200).json({ result: false });
@@ -82,7 +82,7 @@ router.post('/city', async (req, res) => {
 
     // Récupération de tous les restaurants correspondant aux filtres
     const query = constructQuery(req.body);
-    const restaurants = await Restaurant.find(query).select("-_id -__v");
+    const restaurants = await Restaurant.find(query).select("-__v");
 
     // Récupération des restaurants dans le radius
     const radius = parseInt(distance) * 1000;
@@ -116,7 +116,7 @@ router.post('/geolocalisation', async (req, res) => {
 
     // Récupération de tous les restaurants correspondant aux filtres
     const query = constructQuery(req.body);
-    const restaurants = await Restaurant.find(query).select("-_id -__v");
+    const restaurants = await Restaurant.find(query).select("-__v");
 
     // Récupération des restaurants dans le radius
     const radius = parseInt(distance) * 1000;
