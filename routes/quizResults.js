@@ -11,8 +11,8 @@ router.get(
   async (req, res) => {
     try {
       // Récupération du token et recherche de l'utilisateur en bdd
-      const { token } = req.headers;
-      const user = await User.findOne({ token });
+      const { authorization } = req.headers;
+      const user = await User.findOne({ token: authorization });
 
       // Répondre une erreur si aucun utilisateur trouvé
       if (!user) {
@@ -36,8 +36,8 @@ router.put(
   async (req, res) => {
     try {
       // Récupération du token et recherche de l'utilisateur en bdd
-      const { token } = req.headers;
-      const user = await User.findOne({ token });
+      const { authorization } = req.headers;
+      const user = await User.findOne({ token: authorization });
 
       // Répondre une erreur si aucun utilisateur trouvé
       if (!user) {
