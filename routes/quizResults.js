@@ -19,6 +19,7 @@ router.get(
         return res.status(400).json({ result: false, error: "user not found" });
       }
 
+      console.log(user);
       // Envoi des résultats
       res.json({ result: true, data: user.quizResults });
     } catch (error) {
@@ -54,16 +55,17 @@ router.put(
 
       // Préparation des données pour la mise à jour
       const newQuizResult = {
-        quizId: quiz._id,
+        quiz: quiz._id,
         score,
         passed,
         passedAt: Date.now(),
       };
+      console.log(newQuizResult);
       const newQuizResults = [...user.quizResults, newQuizResult];
 
       // Mise à jour des résultats de quizz
       const result = await User.updateOne(
-        { token },
+        { token: authorization },
         { quizResults: newQuizResults }
       );
 
