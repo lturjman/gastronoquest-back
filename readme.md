@@ -2,19 +2,46 @@
 
 ## indexRouter ('/') -- Laura
 
-(Routes pour récupérer les données en dur)
-
 ### Récupérer les défis (sur RestaurantScreen)
 
-GET /challenges
-Pas de req
-Res = tous les challenges
+`GET /challenges`
 
-### Consulter les quiz (sur QuizScreen)
+**Response:**
 
-GET /quiz
-Pas de req
-Res = tous les quiz
+```
+{
+    result: Boolean,
+    challenges: [{
+        title: String,
+        savedCo2: Number
+    }]
+}
+```
+
+### Consulter les quizz (sur QuizScreen)
+
+`GET /quizzes`
+
+**Response:**
+
+```
+{
+    result: Boolean,
+    quizzes: [{
+        quizNumber: Number,
+        title: String,
+        difficulty: String,
+        questions: [{
+            questionNumber: Number,
+            question: String,
+            answers: [String],
+            rightAnswer: String,
+            comment: String,
+            articleUrl: String
+        }]
+    }]       
+}
+```
 
 ## usersRouter ('/users') -- Nathan
 
@@ -22,21 +49,29 @@ Res = tous les quiz
 
 `POST /users/register`
 
-**Body:** `username` | `email` | `password`
+**Body:** 
+
+```
+{
+    username: String,
+    email: String,
+    password: String
+}
+```
 
 **Response:**
 
 ```
 {
-    result: boolean,
+    result: Boolean,
     data: {
-        firstConnection: boolean,
-        username: string,
-        email: string,
-        token: string,
-        level: string,
-        totalSavedCo2: number,
-        favorites: array
+        firstConnection: Boolean,
+        username: String,
+        email: String,
+        token: String,
+        level: String,
+        totalSavedCo2: Number,
+        favorites: [ObjectId]
     }
 }
 ```
@@ -51,21 +86,28 @@ Res = tous les quiz
 
 `POST /users/login`
 
-**Body:** `email`| `password`
+**Body:**
+
+```
+{
+    email: String,
+    password: String
+}
+```
 
 **Response:**
 
 ```
 {
-    result: boolean,
+    result: Boolean,
     data: {
-        firstConnection: boolean,
-        username: string,
-        email: string,
-        token: string,
-        level: string,
-        totalSavedCo2: number,
-        favorites: array
+        firstConnection: Boolean,
+        username: String,
+        email: String,
+        token: String,
+        level: String,
+        totalSavedCo2: Number,
+        favorites: [ObjectId]
     }
 }
 ```
@@ -134,23 +176,21 @@ Res = tous les quiz
 
 ### Récupérer les résultats aux quiz de l'utilisateur (pour QuizScreen)
 
-`GET /quizResults/`
+`GET /quizResults`
 
-**Headers:** `authorization`
+**Headers:** `authorization` (token)
 
 **Response:**
 
 ```
 {
     result: Boolean,
-    data: [
-        {
-            quiz_id: ObjectId,
-            score: Number,
-            passed: Boolean,
-            passedAt: Date,
-        }
-    ]
+    data: [{
+        _id: ObjectId,
+        score: Number,
+        passed: Boolean,
+        passedAt: Date
+    }]
 }
 ```
 
@@ -162,11 +202,19 @@ Res = tous les quiz
 
 ### Mettre à jour les résultats aux quiz après avoir fini un quiz (pour QuestionScreen)
 
-`PUT /quizResults/`
+`PUT /quizResults`
 
 **Headers:** `authorization` (token)
 
-**Body:** `quizId` | `score` | `passed`
+**Body:**
+
+```
+{
+    quizId: String,
+    score: Number,
+    passed: Boolean
+}
+```
 
 **Response:**
 
@@ -177,10 +225,10 @@ Renvoie la liste actualisée
     result: Boolean,
     data: [
         {
-            quiz_id: ObjectId,
+            _id: ObjectId,
             score: Number,
             passed: Boolean,
-            passedAt: Date,
+            passedAt: Date
         }
     ]
 }
@@ -211,10 +259,7 @@ Res = result
 
 ## searchRouter ('/search') -- Morgan
 
-Routes pour afficher les restaurants trouvés en fonction des différents filtres de recherche et du "niveau de zoom" de la carte
-
-**A documenter**
-
+Routes pour afficher les restaurants trouvés en fonction des différents filtres de recherche et du "niveau de zoom" de la carte.
 
 **Response:**
 
@@ -241,5 +286,62 @@ Routes pour afficher les restaurants trouvés en fonction des différents filtre
             bookingUrl: String
         }
     ]
+}
+```
+
+### Route pour chercher un restaurant par son nom
+
+`POST /search/restaurant`
+
+```
+{
+    input: String,
+    badges: [String],
+    types: [String],
+    priceRange: String
+}
+```
+
+### Route pour chercher des restaurants dans une ville précise
+
+`POST /search/address`
+
+```
+{
+    input: String,
+    badges: [String],   // optional
+    types: [String],   // optional
+    priceRange: String   // optional
+}
+```
+
+### Route pour chercher un restaurant à proximité (du centre) d'une ville
+
+`POST /search/coordinates`
+
+```
+{
+    input: String,
+    distance: String,
+    badges: [String],   // optional
+    types: [String],   // optional
+    priceRange: String   // optional
+}
+```
+
+### Route pour chercher des restaurants autour de soi
+
+`POST /search/geolocation`
+
+```
+{
+    geolocation: {
+        latitude: Number,
+        longitude: Number,
+    },
+    distance: String,   // optional
+    badges: [String],   // optional
+    types: [String],   // optional
+    priceRange: String   // optional
 }
 ```
