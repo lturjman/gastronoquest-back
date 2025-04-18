@@ -50,11 +50,12 @@ router.post(
     }
 
     // Mettre à jour les favoris de l'utilisateur
-    const updatedUser = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       user._id,
       { $addToSet: { favorites: restaurantId } }, // Ajoute le restaurant aux favoris si ce n'est pas déjà fait
       { new: true } //renvoi le document à jour
     );
+    const updatedUser = await User.findById(user._id).populate("favorites");
 
     res.json({ result: true, user: updatedUser });
   }
@@ -79,14 +80,26 @@ router.delete("/", async (req, res) => {
       .json({ result: false, message: "Restaurant not found" });
   }
 
-  // Supprimer le restaurant des favoris de l'utilisateur
-  const updatedUser = await User.findByIdAndUpdate(
-    user._id,
-    { $pull: { favorites: restaurantId } }, // Utiliser $pull pour retirer le restaurant des favoris
-    { new: true }
+  // Filtrer les favoris pour exclure le restaurant à supprimer
+  const updatedFavorites = user.favorites.filter(
+    (fav) => fav._id.toString() !== restaurantId
   );
 
-  res.json({ result: true, user: updatedUser }); // Retourner l'utilisateur mis à jour avec ses nouveaux favoris
+  // Mettre à jour les favoris de l'utilisateur
+  user.favorites = updatedFavorites;
+  await user.save();
+
+  res.json({ result: true, user: user }); // Retourner l'utilisateur mis à jour avec ses nouveaux favoris
 });
+
+// Supprimer le restaurant des favoris de l'utilisateur
+// const updatedUser = await User.findByIdAndUpdate(
+//   user._id,
+//   { $pull: { favorites: restaurantId } }, // Utiliser $pull pour retirer le restaurant des favoris
+//   { new: true }
+// );
+
+// res.json({ result: true, user: updatedUser }); // Retourner l'utilisateur mis à jour avec ses nouveaux favoris
+// });
 
 module.exports = router;
