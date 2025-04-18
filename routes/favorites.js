@@ -53,7 +53,7 @@ router.post(
     await User.findByIdAndUpdate(
       user._id,
       { $addToSet: { favorites: restaurantId } }, // Ajoute le restaurant aux favoris si ce n'est pas déjà fait
-      { new: true }.populate("favorites") //renvoi le document à jour
+      { new: true } //renvoi le document à jour
     );
     const updatedUser = await User.findById(user._id).populate("favorites");
 
