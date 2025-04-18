@@ -12,7 +12,7 @@ router.get('/',
   validateFields(["authorization"], "headers"),
   async (req, res) => {
   try {
-    const { token } = req.headers.authorization;
+    const token = req.headers.authorization;
 
     const user = await User.findOne({ token })
     .select('quests -_id')
@@ -40,7 +40,7 @@ router.post('/',
   validateFields(["restaurant", "achievedChallenges"], "body"),
   async (req, res) => {
   try {
-    const { token } = req.headers.authorization;
+    const token = req.headers.authorization;
     const { restaurant, achievedChallenges } = req.body;
     const quest = { restaurant, achievedChallenges, date: new Date() };
 

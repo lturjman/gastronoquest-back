@@ -83,11 +83,13 @@ Res = tous les quiz
 
 `GET /history`
 
+**Headers:** `authorization` (token)
+
 **Response:**
 
 ```
 {
-    result: boolean,
+    result: Boolean,
     data: [{
         restaurant: ObjectId,
         savedCo2: Number,
@@ -103,6 +105,8 @@ Res = tous les quiz
 ### Route pour mettre à jour l'historique après validation d'une quête (pour RestaurantScreen)
 
 `POST /history`
+
+**Headers:** `authorization` (token)
 
 **Body:**
 

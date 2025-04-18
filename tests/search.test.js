@@ -2,33 +2,33 @@ const request = require("supertest");
 const app = require("../app");
 const Restaurant = require("../models/restaurants");
 
-//register
-describe("POST /users/register", () => {
+describe("POST /search/restaurant", () => {
+
   // Enlever le mock après les tests
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  //Test sur une inscription réussie
-  it("POST /users/register inscription réussie", async () => {
+  // Test sur une recherche de restaurant avec l'input "Entre nous"
+  it("POST /search/restaurant 'Entre nous'", async () => {
     // Mock du findOne qui ne retourne rien (car l'utilisateur n'existe pas)
     jest.spyOn(User, "findOne").mockResolvedValue(null);
 
     // Body inséré dans le requête du test
     const requestBody = {
-      username: "MauriceDupont",
-      email: "maurice.dupont@example.com",
-      password: "mauriceLeBest58",
+      name: "Entre nous"
     };
 
     // Exécution de la route avec le body
-    const res = await request(app).post("/users/register").send(requestBody);
+    const res = await request(app).post("/search/restaurant").send(requestBody);
 
     // Résultats attendus
-    expect(res.statusCode).toBe(201);
+    expect(res.statusCode).toBe(200);
     expect(res.body.result).toBe(true);
+    expect(res.body.data).toContain({});
   });
 
+  /*
   //Test avec un utilisateur déjà existant
   it("POST /users/register Utilisateur déjà existant", async () => {
     // Mock du findOne qui ne retourne un utilisateur
@@ -80,4 +80,5 @@ describe("POST /users/register", () => {
     expect(res.body.result).toBe(false);
     expect(res.body.error).toBe("fields missing: username");
   });
+  */
 });
