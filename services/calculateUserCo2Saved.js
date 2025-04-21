@@ -5,9 +5,11 @@ const calculateUserCo2Saved = (quests) => {
 
   for (let quest of quests) {
     for (let achievedChallenge of quest.achievedChallenges) {
-      totalSavedCo2 += achievedChallenge.savedCo2;
+      totalSavedCo2 += achievedChallenge.savedCo2 * 100;
     }
   }
+
+  totalSavedCo2 = parseFloat(totalSavedCo2 / 100).toFixed(2);
 
   return totalSavedCo2;
 };
