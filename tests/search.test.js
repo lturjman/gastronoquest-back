@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../app");
-
+const mongoose = require('mongoose');
 
 it("POST /search/restaurant 'Entre nous'", async () => {
 
@@ -35,4 +35,8 @@ it("POST /search/address 'Tours'", async () => {
   expect(res.statusCode).toBe(200);
   expect(res.body.result).toBe(true);
   expect(res.body.restaurants).toHaveLength(2);
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
 });
