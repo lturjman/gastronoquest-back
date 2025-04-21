@@ -19,7 +19,6 @@ router.get(
         return res.status(400).json({ result: false, error: "user not found" });
       }
 
-      console.log(user);
       // Envoi des résultats
       res.json({ result: true, data: user.quizResults });
     } catch (error) {
@@ -53,15 +52,41 @@ router.put(
         return res.status(400).json({ result: false, error: "quiz not found" });
       }
 
-      // Préparation des données pour la mise à jour
+      // Mettre à jour le quizz s'il existe déjà
+      // Utilisation de equals pour comparer des objects ID MongoDB
+      const quizResultsFiltered = user.quizResults.filter((quizResult) =>
+        quizResult.quiz.equals(quiz._id)
+      );
+
+      // Le quizz existe déjà mais le score est moins élevé -> on ne fait rien
+      if (quizResultsFiltered.length && quizResultsFiltered[0].score >= score) {
+        return res.json({ result: true, data: quizResultsFiltered[0] });
+      }
+
+      // Dans les deux autres cas on va devoir ajouter un nouveau résultat en bdd, soit en écrasant soit en ajoutant
+      // Préparation du nouveau résultat
       const newQuizResult = {
         quiz: quiz._id,
         score,
         passed,
         passedAt: Date.now(),
       };
-      console.log(newQuizResult);
-      const newQuizResults = [...user.quizResults, newQuizResult];
+
+      let newQuizResults;
+
+      // Le quizz existe et le score est plus élevé -> on met à jour les résultats
+      if (quizResultsFiltered.length && quizResultsFiltered[0].score < score) {
+        // Création d'une copie en enlevant le résultat
+        const quizResultsCopy = user.quizResults.filter(
+          (quizResult) => !quizResult.quiz.equals(quiz._id)
+        );
+
+        // Ajout du nouveau résultat à la copie
+        newQuizResults = [...quizResultsCopy, newQuizResult];
+      } else {
+        // Si le quiz n'existe pas, on ajoute simplement le nouveau résultat
+        newQuizResults = [...user.quizResults, newQuizResult];
+      }
 
       // Mise à jour des résultats de quizz
       const result = await User.updateOne(

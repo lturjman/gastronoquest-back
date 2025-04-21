@@ -3,7 +3,6 @@
 const validateFields = (requiredFields, location = "body") => {
   return (req, res, next) => {
     const data = req[location];
-    console.log(data);
     const missingFields = requiredFields.filter(
       (field) => data[field] === undefined
     );
