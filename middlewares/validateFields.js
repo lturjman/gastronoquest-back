@@ -3,7 +3,10 @@
 const validateFields = (requiredFields, location = "body") => {
   return (req, res, next) => {
     const data = req[location];
-    const missingFields = requiredFields.filter((field) => !data[field]);
+    console.log(data);
+    const missingFields = requiredFields.filter(
+      (field) => data[field] === undefined
+    );
 
     if (missingFields.length > 0) {
       return res.status(400).json({
