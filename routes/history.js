@@ -4,7 +4,6 @@ const User = require("../models/users");
 const { validateFields } = require("../middlewares/validateFields");
 const { calculateUserCo2Saved } = require("../services/calculateUserCo2Saved");
 
-
 // GET /history : Récupérer l'historique des quêtes de l'utilisateur
 router.get(
   "/",
@@ -32,8 +31,7 @@ router.get(
   }
 );
 
-// POST /history : Mettre à jour l'historique après validation d'une quête (pour RestaurantScreen)
-
+// POST /history : Mettre à jour l'historique après validation d'une quête
 router.post(
   "/",
   validateFields(["authorization"], "headers"),
@@ -69,5 +67,6 @@ router.post(
     }
   }
 );
+
 
 module.exports = router;
