@@ -8,13 +8,13 @@ const { validateFields } = require("../middlewares/validateFields");
 router.get("/challenges", async (req, res) => {
   try {
     const challenges = await Challenge.find().select("-__v");
-    res.json({ result: true, challenges });
+
+    if (challenges.length > 0) res.status(200).json({ result: true, challenges });
+    else res.status(404).json({ result: false });
+
   } catch (error) {
-    res.status(500).json({
-      result: false,
-      message: "Error retrieving challenges",
-      error,
-    });
+    console.error(error);
+    res.status(500).json({ result: false, error: "Error retrieving challenges" });
   }
 });
 
@@ -22,13 +22,13 @@ router.get("/challenges", async (req, res) => {
 router.get("/quizzes", async (req, res) => {
   try {
     const quizzes = await Quiz.find().select("-questions -__v");
-    res.json({ result: true, quizzes });
+    
+    if (quizzes.length > 0) res.status(200).json({ result: true, quizzes });
+    else res.status(404).json({ result: false });
+
   } catch (error) {
-    res.status(500).json({
-      result: false,
-      message: "Error retrieving quizzes",
-      error,
-    });
+    console.error(error);
+    res.status(500).json({ result: false, error: "Error retrieving quizzes" });
   }
 });
 
@@ -40,13 +40,13 @@ router.get(
     try {
       const { quizId } = req.params;
       const data = await Quiz.findById(quizId).select("-__v");
-      res.json({ result: true, data });
+
+      if (data) res.status(200).json({ result: true, data });
+      else res.status(404).json({ result: false });
+
     } catch (error) {
-      res.status(500).json({
-        result: false,
-        message: "Error retrieving quiz",
-        error,
-      });
+      console.error(error);
+      res.status(500).json({ result: false, error: "Error retrieving quiz" });
     }
   }
 );

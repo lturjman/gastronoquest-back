@@ -19,11 +19,10 @@ router.get(
           { path: "quests.achievedChallenges", select: "title savedCo2 -_id" },
         ]);
 
-      if (user.quests.length === 0) {
-        res.status(200).json({ result: false });
-      } else {
-        res.status(200).json({ result: true, data: user.quests });
-      }
+      // Réponse
+      if (user.quests.length === 0) res.status(404).json({ result: false });
+      else res.status(200).json({ result: true, data: user.quests });
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ result: false, error: "Internal servor error" });
@@ -40,7 +39,11 @@ router.post(
     try {
       const token = req.headers.authorization;
       const { restaurant, achievedChallenges } = req.body;
-      const quest = { restaurant, achievedChallenges, date: new Date() };
+      const quest = {
+        restaurant,
+        achievedChallenges,
+        date: Date.now()
+      };
 
       // Ajout de la quête à l'historique de l'utilisateur
       const response = await User.updateOne(
@@ -59,7 +62,7 @@ router.post(
 
         res.status(200).json({ result: true, totalSavedCo2 });
       } else {
-        res.status(200).json({ result: false });
+        res.status(500).json({ result: false, error: "Internal servor error" });
       }
     } catch (error) {
       console.error(error);
@@ -67,6 +70,5 @@ router.post(
     }
   }
 );
-
 
 module.exports = router;

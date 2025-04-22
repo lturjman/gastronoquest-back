@@ -18,11 +18,7 @@ router.post(
 
       // Vérifier si l'utilisateur existe déjà
       const result = await User.findOne({ email });
-      if (result) {
-        return res
-          .status(400)
-          .json({ result: false, error: "email already used" });
-      }
+      if (result) return res.status(400).json({ result: false, error: "Email already used" });
 
       // Création du token utilisateur et hash du mot de passe
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -55,7 +51,7 @@ router.post(
       res.status(201).json({ result: true, data });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ result: false, error: "internal server error" });
+      res.status(500).json({ result: false, error: "Internal server error" });
     }
   }
 );
@@ -73,18 +69,11 @@ router.post(
       const user = await User.findOne({ email }).populate(
         "quests.achievedChallenges favorites"
       );
-      if (!user) {
-        return res.status(400).json({ result: false, error: "user not found" });
-      }
+      if (!user) return res.status(400).json({ result: false, error: "User not found" });
 
       // Comparaison du mot de passe
       const isCorrectPassword = await bcrypt.compare(password, user.password);
-
-      if (!isCorrectPassword) {
-        return res
-          .status(401)
-          .json({ result: false, error: "invalid password" });
-      }
+      if (!isCorrectPassword) return res.status(401).json({ result: false, error: "Invalid password" });
 
       // Récupération des informations de l'utilisateur
       // Calcul du niveau de l'utilisateur et du CO2 économisé
@@ -103,10 +92,10 @@ router.post(
         favorites,
       };
 
-      res.json({ result: true, data });
+      res.status(200).json({ result: true, data });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ result: false, error: "internal server error" });
+      res.status(500).json({ result: false, error: "Internal server error" });
     }
   }
 );

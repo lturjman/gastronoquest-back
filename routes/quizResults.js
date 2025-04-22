@@ -11,19 +11,17 @@ router.get(
   async (req, res) => {
     try {
       // Récupération du token et recherche de l'utilisateur en bdd
-      const { authorization } = req.headers;
-      const user = await User.findOne({ token: authorization });
+      const token = req.headers.authorization;
+      const user = await User.findOne({ token });
 
       // Répondre une erreur si aucun utilisateur trouvé
-      if (!user) {
-        return res.status(400).json({ result: false, error: "user not found" });
-      }
+      if (!user) return res.status(400).json({ result: false, error: "User not found" });
 
       // Envoi des résultats
       res.json({ result: true, data: user.quizResults });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ result: false, error: "internal server error" });
+      res.status(500).json({ result: false, error: "Internal server error" });
     }
   }
 );
@@ -40,17 +38,13 @@ router.put(
       const user = await User.findOne({ token: authorization });
 
       // Répondre une erreur si aucun utilisateur trouvé
-      if (!user) {
-        return res.status(400).json({ result: false, error: "user not found" });
-      }
+      if (!user) return res.status(400).json({ result: false, error: "User not found" });
 
       // Vérification si le quizz existe bien en bdd
       const { quizId, score, passed } = req.body;
       const quiz = await Quiz.findById(quizId);
 
-      if (!quiz) {
-        return res.status(400).json({ result: false, error: "quiz not found" });
-      }
+      if (!quiz) return res.status(400).json({ result: false, error: "Quiz not found" });
 
       // Mettre à jour le quizz s'il existe déjà
       // Utilisation de equals pour comparer des objects ID MongoDB
@@ -99,13 +93,13 @@ router.put(
         res.json({ result: true, data: newQuizResults });
       } else {
         // Erreur en cas d'échec de la mise à jour
-        throw new Error("update failed");
+        throw new Error("Update failed");
       }
 
       // Envoi des résultats
     } catch (error) {
       console.error(error);
-      res.status(500).json({ result: false, error: "internal server error" });
+      res.status(500).json({ result: false, error: "Internal server error" });
     }
   }
 );
