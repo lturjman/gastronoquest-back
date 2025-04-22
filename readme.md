@@ -1,8 +1,8 @@
 # Routes
 
-## indexRouter ('/') -- Laura
+## indexRouter ('/')
 
-### Récupérer les défis (sur RestaurantScreen)
+### Récupérer les défis
 
 `GET /challenges`
 
@@ -18,7 +18,7 @@
 }
 ```
 
-### Consulter les quizz (sur QuizScreen)
+### Consulter les quizz
 
 `GET /quizzes`
 
@@ -43,7 +43,18 @@
 }
 ```
 
-## usersRouter ('/users') -- Nathan
+### Récupérer les informations d'un quizz
+
+`GET /quiz/quizId`
+
+**Response:**
+
+```
+...
+```
+
+
+## usersRouter ('/users')
 
 ### Route pour s'inscrire (pour RegisterScreen)
 
@@ -119,7 +130,7 @@
 - 401 invalid password
 - 500 internal server error
 
-## historyRouter ('/history') -- Morgan
+## historyRouter ('/history')
 
 ### Route pour récupérer l'historique des quêtes de l'utilisateur (pour HistoryScreen)
 

@@ -1,17 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const geolib = require('geolib');
-
 const Restaurant = require('../models/restaurants');
+const { validateFields } = require("../middlewares/validateFields");
 const { constructQuery } = require("../services/constructQuery");
 
-
-// Intégrer le autocomplete et voir comment ça adapte les requêtes #todo
-
-/*
-// Blocage si la longueur de l'input est inférieure à 3
-if (req.body.input.length < 3) return res.status(200).json({ result: false });
-*/
 
 // POST /search/restaurant : chercher un restaurant par son nom (name)
 
@@ -144,34 +137,6 @@ router.post('/geolocation', async (req, res) => {
     res.status(500).json({ result: false, error: "Internal servor error" });
   }
 });
-
-
-
-
-/* NOTES POUR EVENTUELLE CONVERSION EN AGGREGATION
-
-Restaurant.aggregate( [
-  { $project:
-     {
-       isWithinRadius:
-           { $function:
-              {
-                 body: function(latitude, longitude) {
-                    return geolib.isPointWithinRadius(
-                      { latitude, longitude },
-                      center,
-                      radius
-                    ); // compléter
-                 },
-                 args: [ "$coordinates.latitude", "$coordinates.longitude" ], // checker $.$
-                 lang: "js"
-              }
-           },
-           // enchaîner avec un filter ?
-      }
-   }
-] )
-*/
 
 
 module.exports = router;
