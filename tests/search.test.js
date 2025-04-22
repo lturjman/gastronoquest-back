@@ -3,7 +3,6 @@ const app = require("../app");
 const mongoose = require('mongoose');
 
 it("POST /search/restaurant 'Entre nous'", async () => {
-
   // Body inséré dans le requête du test
   const requestBody = {
     input: "entre nous"
@@ -19,9 +18,7 @@ it("POST /search/restaurant 'Entre nous'", async () => {
   expect(res.body.restaurants[0].name).toBe("Entre nous");
 });
 
-
 it("POST /search/address 'Tours'", async () => {
-
   // Body inséré dans le requête du test
   const requestBody = {
     input: "Tours",

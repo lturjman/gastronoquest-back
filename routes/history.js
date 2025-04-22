@@ -1,12 +1,10 @@
 const express = require("express");
 const router = express.Router();
-
 const User = require("../models/users");
 const { validateFields } = require("../middlewares/validateFields");
 const { calculateUserCo2Saved } = require("../services/calculateUserCo2Saved");
 
-// GET /history : Récupérer l'historique des quêtes de l'utilisateur (pour HistoryScreen)
-
+// GET /history : Récupérer l'historique des quêtes de l'utilisateur
 router.get(
   "/",
   validateFields(["authorization"], "headers"),
@@ -33,8 +31,7 @@ router.get(
   }
 );
 
-// POST /history : Mettre à jour l'historique après validation d'une quête (pour RestaurantScreen)
-
+// POST /history : Mettre à jour l'historique après validation d'une quête
 router.post(
   "/",
   validateFields(["authorization"], "headers"),
@@ -70,5 +67,6 @@ router.post(
     }
   }
 );
+
 
 module.exports = router;
