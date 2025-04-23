@@ -40,7 +40,7 @@ describe("POST/favoites", () => {
         "http://paginegialle.it/justo/in/hac.jpg?ultrices=et&vel=magnis&augue=d…",
     });
 
-    jest.spyOn(User, "findByIdAndUpdate").mockResolvedValue(userMock);
+    jest.spyOn(User, "updateOne").mockResolvedValue({ acknowledged: true });
 
     // Body inséré dans le requête du test
     const requestBody = {
