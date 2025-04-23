@@ -27,7 +27,6 @@ const calculateUserLevel = (co2) => {
       let progressPercentage = ((co2 * 100 - previousThreshold * 100) / (currentLevel.co2 * 100 - previousThreshold * 100)) * 100;
       progressPercentage = Math.min(Math.max(progressPercentage, 0), 100);
 
-      totalSavedCo2 = parseFloat(totalSavedCo2 / 100).toFixed(2);
       return { currentLevel, nextLevel, progressPercentage };
     }
   }
