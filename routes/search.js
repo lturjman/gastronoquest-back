@@ -5,15 +5,13 @@ const Restaurant = require('../models/restaurants');
 const { validateFields } = require("../middlewares/validateFields");
 const { constructQuery } = require("../services/constructQuery");
 
-
-// POST /search/restaurant : chercher un restaurant par son nom (name)
-
+// Route pour chercher un restaurant par son nom (name)
 router.post(
   '/restaurant',
   validateFields(["input"], "body"),
   async (req, res) => {
     try {
-      // Récupération de tous les restaurants correspondant aux filtres
+      // Récupération de tous les restaurants correspondant aux filtres de recherche
       const query = {
         name: { $regex: new RegExp(req.body.input, "i") },
         ...constructQuery(req.body)
@@ -21,7 +19,7 @@ router.post(
       const restaurants = await Restaurant.find(query).select("-__v");
 
       // Réponse
-      if (restaurants.length === 0) res.status(404).json({ result: false });
+      if (restaurants.length === 0) res.status(404).json({ result: false, error: "No restaurants match these criteria" });
       else res.status(200).json({ result: true, restaurants });
 
     } catch (error) {
@@ -30,15 +28,13 @@ router.post(
     }  
 });
 
-
-// POST /search/address : chercher un restaurant par son adresse (address)
-
+// Route pour chercher des restaurants dans une ville précise (address)
 router.post(
   '/address',
   validateFields(["input"], "body"),
   async (req, res) => {
     try {
-      // Récupération de tous les restaurants correspondant aux filtres
+      // Récupération de tous les restaurants correspondant aux filtres de recherche
       const query = {
         address: { $regex: new RegExp(`\\b${req.body.input}$`, "i") },
         ...constructQuery(req.body)
@@ -46,7 +42,7 @@ router.post(
       const restaurants = await Restaurant.find(query).select("-__v");
 
       // Réponse
-      if (restaurants.length === 0) res.status(404).json({ result: false });
+      if (restaurants.length === 0) res.status(404).json({ result: false, error: "No restaurants match these criteria" });
       else res.status(200).json({ result: true, restaurants });
 
     } catch (error) {
@@ -55,9 +51,7 @@ router.post(
     }
 });
 
-
-// POST /search/coordinates : chercher un restaurant par sa ville (coordinates)
-
+// Route pour chercher des restaurants à proximité d'une ville (coordinates)
 router.post(
   '/coordinates',
   validateFields(["input","distance"], "body"),
@@ -69,16 +63,19 @@ router.post(
       const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${input}`);
       const data = await response.json();
       const foundCity = data.features[0];
+
+      if (!foundCity) return res.status(500).json({ result: false, error: "Internal server error"});
+
       const center = {
         latitude: foundCity.geometry.coordinates[1],
         longitude: foundCity.geometry.coordinates[0],
       };
 
-      // Récupération de tous les restaurants correspondant aux filtres
+      // Récupération de tous les restaurants correspondant aux filtres de recherche
       const query = constructQuery(req.body);
       const restaurants = await Restaurant.find(query).select("-__v");
 
-      if (restaurants.length === 0) return res.status(404).json({ result: false });
+      if (restaurants.length === 0) return res.status(404).json({ result: false, error: "No restaurants match these criteria" });
 
       // Récupération des restaurants dans le radius
       const radius = parseInt(distance) * 1000;
@@ -93,7 +90,7 @@ router.post(
       );
 
       // Réponse
-      if (restaurantsWithinRadius.length === 0) res.status(404).json({ result: false });
+      if (restaurantsWithinRadius.length === 0) res.status(404).json({ result: false, error: "No restaurants match these criteria" });
       else res.status(200).json({ result: true, restaurants: restaurantsWithinRadius });
 
     } catch (error) {
@@ -102,9 +99,7 @@ router.post(
     }
 });
 
-
-// POST /search/geolocation : chercher un restaurant en fonction de la géolocalisation de l'utilisateur (coordinates)
-
+// Route pour chercher des restaurants autour de soi, en fonction de la géolocalisation de l'utilisateur (coordinates)
 router.post(
   '/geolocation',
   validateFields(["geolocation","distance"], "body"),
@@ -130,7 +125,7 @@ router.post(
       );
 
       // Réponse
-      if (restaurantsWithinRadius.length === 0) res.status(404).json({ result: false });
+      if (restaurantsWithinRadius.length === 0) res.status(404).json({ result: false, error: "No restaurants match these criteria" });
       else res.status(200).json({ result: true, restaurants: restaurantsWithinRadius });
 
     } catch (error) {

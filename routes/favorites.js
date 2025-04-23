@@ -4,7 +4,7 @@ const User = require("../models/users");
 const Restaurant = require("../models/restaurants");
 const { validateFields } = require("../middlewares/validateFields");
 
-// ROUTE POUR AJOUTER un restaurant aux favoris d'un utilisateur
+// ROUTE POUR AJOUTER un restaurant aux favoris de l'utilisateur
 router.post(
   "/",
   validateFields(["authorization"], "headers"),
@@ -39,7 +39,7 @@ router.post(
   }
 );
 
-// ROUTE POUR SUPPRIMER un restaurant des favoris d’un user
+// ROUTE POUR SUPPRIMER un restaurant des favoris de l'utilisateur
 router.delete(
   "/",
   validateFields(["authorization"], "headers"),

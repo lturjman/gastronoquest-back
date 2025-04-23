@@ -58,7 +58,7 @@ describe("POST /users/register", () => {
     // Résultats attendus
     expect(res.statusCode).toBe(400);
     expect(res.body.result).toBe(false);
-    expect(res.body.error).toBe("email already used");
+    expect(res.body.error).toBe("Email already used");
   });
 
   //Test avec un champ manquant

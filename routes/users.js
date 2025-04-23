@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const uid2 = require("uid2");
+const bcrypt = require("bcrypt");
 const User = require("../models/users");
 const { validateFields } = require("../middlewares/validateFields");
 const { calculateUserLevel } = require("../services/calculateUserLevel");
 const { calculateUserSavedCo2 } = require("../services/calculateUserSavedCo2");
-const uid2 = require("uid2");
-const bcrypt = require("bcrypt");
 
 // Inscription
 // Utilisation d'un middleware pour vérifier les champs nécessaires
@@ -24,7 +24,7 @@ router.post(
       const hashedPassword = await bcrypt.hash(password, 10);
       const token = uid2(32);
 
-      // Ajout de l'utilisateur en bdd
+      // Ajout de l'utilisateur en BDD
       const newUser = new User({
         username,
         email,
@@ -34,19 +34,19 @@ router.post(
         quests: guest.quest !== null ? [guest.quest] : [],
         quizResults: guest.quiz !== null ? [guest.quiz] : [],
       });
-
       await newUser.save();
 
-      // Préparation des éléments à retourner pour insertion dans le store redux côté front
+      // Récupération des informations de l'utilisateur
       const user = await User.findOne({ token }).populate(
         "quests.achievedChallenges favorites"
       );
       const { favorites, quests } = user;
-      
+
       // Calcul du niveau de l'utilisateur et du CO2 économisé
       const totalSavedCo2 = calculateUserSavedCo2(quests);
       const level = calculateUserLevel(totalSavedCo2);
 
+      // Préparation des éléments à retourner pour insertion dans le store Redux
       const data = {
         firstConnection: true,
         username,
@@ -74,7 +74,7 @@ router.post(
     try {
       const { email, password } = req.body;
 
-      // Vérifier si l'utilisateur existe
+      // Vérifier si l'utilisateur existe déjà
       const user = await User.findOne({ email }).populate(
         "quests.achievedChallenges favorites"
       );
@@ -85,12 +85,13 @@ router.post(
       if (!isCorrectPassword) return res.status(401).json({ result: false, error: "Invalid password" });
 
       // Récupération des informations de l'utilisateur
-      // Calcul du niveau de l'utilisateur et du CO2 économisé
       const { username, token, favorites, quests } = user;
+
+      // Calcul du niveau de l'utilisateur et du CO2 économisé
       const totalSavedCo2 = calculateUserSavedCo2(quests);
       const level = calculateUserLevel(totalSavedCo2);
 
-      // Préparation des données à retourner
+      // Préparation des éléments à retourner pour insertion dans le store Redux
       const data = {
         firstConnection: false,
         username,

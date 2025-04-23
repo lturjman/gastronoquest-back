@@ -2,7 +2,7 @@
 
 ## indexRouter ('/')
 
-### Récupérer les défis
+### Route pour récupérer tous les défis
 
 `GET /challenges`
 
@@ -12,13 +12,18 @@
 {
     result: Boolean,
     challenges: [{
+        _id: ObjectId,
         title: String,
         savedCo2: Number
     }]
 }
 ```
 
-### Consulter les quizz
+**Errors:**
+
+- 500 Internal server error
+
+### Récupérer les informations de tous les quizz
 
 `GET /quizzes`
 
@@ -28,35 +33,55 @@
 {
     result: Boolean,
     quizzes: [{
+        _id: ObjectId,
         quizNumber: Number,
         title: String,
-        difficulty: String,
-        questions: [{
-            questionNumber: Number,
-            question: String,
-            answers: [String],
-            rightAnswer: String,
-            comment: String,
-            articleUrl: String
-        }]
-    }]       
+        difficulty: String
+    }]
 }
 ```
 
-### Récupérer les informations d'un quizz
+**Errors:**
+
+- 500 Internal server error
+
+### Route pour récupérer un quiz
 
 `GET /quiz/quizId`
 
 **Response:**
 
 ```
-...
+{
+    result: Boolean,
+    data: [
+        {
+            _id: ObjectId,
+            quizNumber: Number,
+            title: String,
+            difficulty: String,
+            questions: [
+                {
+                    questionNumber: Number,
+                    question: String,
+                    answers: [String],
+                    rightAnswer: String,
+                    comment: String,
+                    articleUrl: String
+                }
+            ]
+        }
+    ]
+}
 ```
 
+**Errors:**
+
+- 500 Internal server error
 
 ## usersRouter ('/users')
 
-### Route pour s'inscrire (pour RegisterScreen)
+### Route pour s'inscrire et récupérer les informations de l'utilisateur
 
 `POST /users/register`
 
@@ -66,7 +91,20 @@
 {
     username: String,
     email: String,
-    password: String
+    password: String,
+    guest: {
+        favorite: String | null,
+        quiz: {
+            quizId: String,
+            score: Number,
+            passed: Boolean,
+            passedAt: Date
+        } | null,
+        quest: {
+            restaurant: String,
+            achievedChallenges: [String]
+        } | null
+    }
 }
 ```
 
@@ -80,20 +118,51 @@
         username: String,
         email: String,
         token: String,
-        level: String,
+        level: {
+            currentLevel: {
+                level: String,
+                icon: String,
+                co2: Number
+            },
+            nextLevel: {
+                nextLevel: String,
+                icon: String,
+                remaining: Number
+            },
+            progressPercentage: Number
+        },
         totalSavedCo2: Number,
-        favorites: [ObjectId]
+        favorites: [
+            {
+                _id: ObjectId,
+                name: String,
+                desc: String,
+                longDesc: String,
+                score: Number,
+                badges: [String],
+                types: [String],
+                priceRange: String,
+                address: String,
+                coordinates: {
+                    latitude: Number,
+                    longitude: Number,
+                },
+                imageUrl: String,
+                websiteUrl: String,
+                bookingUrl: String
+            }
+        ]
     }
 }
 ```
 
 **Errors:**
 
-- 400 fields missing: []
-- 400 email already used
-- 500 internal server error
+- 400 Fields missing: []
+- 400 Email already used
+- 500 Internal server error
 
-### Route pour se connecter et récupérer les informations de l'utilisateur (pour LoginScreen)
+### Route pour se connecter et récupérer les informations de l'utilisateur
 
 `POST /users/login`
 
@@ -116,23 +185,54 @@
         username: String,
         email: String,
         token: String,
-        level: String,
+        level: {
+            currentLevel: {
+                level: String,
+                icon: String,
+                co2: Number
+            },
+            nextLevel: {
+                nextLevel: String,
+                icon: String,
+                remaining: Number
+            },
+            progressPercentage: Number
+        },
         totalSavedCo2: Number,
-        favorites: [ObjectId]
+        favorites: [
+            {
+                _id: ObjectId,
+                name: String,
+                desc: String,
+                longDesc: String,
+                score: Number,
+                badges: [String],
+                types: [String],
+                priceRange: String,
+                address: String,
+                coordinates: {
+                    latitude: Number,
+                    longitude: Number,
+                },
+                imageUrl: String,
+                websiteUrl: String,
+                bookingUrl: String
+            }
+        ]
     }
 }
 ```
 
 **Errors:**
 
-- 400 fields missing: []
-- 400 user not found
-- 401 invalid password
-- 500 internal server error
+- 400 Fields missing: []
+- 400 User not found
+- 401 Invalid password
+- 500 Internal server error
 
 ## historyRouter ('/history')
 
-### Route pour récupérer l'historique des quêtes de l'utilisateur (pour HistoryScreen)
+### Route pour récupérer l'historique des quêtes de l'utilisateur
 
 `GET /history`
 
@@ -143,19 +243,22 @@
 ```
 {
     result: Boolean,
-    data: [{
-        restaurant: ObjectId,
-        savedCo2: Number,
-        achievedChallenges: [ObjectId]
-    }]
+    data: [
+        {
+            restaurant: ObjectId,
+            savedCo2: Number,
+            achievedChallenges: [ObjectId]
+        }
+    ]
 }
 ```
 
 **Errors:**
 
-- 500 internal server error
+- 404 User not found
+- 500 Internal server error
 
-### Route pour mettre à jour l'historique après validation d'une quête (pour RestaurantScreen)
+### Route pour mettre à jour l'historique de l'utilisateur après validation d'une quête
 
 `POST /history`
 
@@ -165,8 +268,8 @@
 
 ```
 {
-    restaurant: ObjectId,
-    achievedChallenges: [ObjectId]
+    restaurant: String,
+    achievedChallenges: [String]
 }
 ```
 
@@ -175,61 +278,36 @@
 ```
 {
     result: Boolean,
-    totalSavedCo2: Number
+    totalSavedCo2: Number,
+    level: {
+        currentLevel: {
+            level: String,
+            icon: String,
+            co2: Number
+        },
+        nextLevel: {
+            nextLevel: String,
+            icon: String,
+            remaining: Number
+        },
+        progressPercentage: Number
+    }
 }
 ```
 
 **Errors:**
 
-- 500 internal server error
+- 500 Internal server error
 
-## quizResultsRouter ('/quizResults') -- Nathan
+## quizResultsRouter ('/quizResults')
 
-### Récupérer les résultats aux quiz de l'utilisateur (pour QuizScreen)
+### Route pour récupérer les résultats aux quizz de l'utilisateur
 
 `GET /quizResults`
 
 **Headers:** `authorization` (token)
 
 **Response:**
-
-```
-{
-    result: Boolean,
-    data: [{
-        _id: ObjectId,
-        score: Number,
-        passed: Boolean,
-        passedAt: Date
-    }]
-}
-```
-
-**Errors:**
-
-- 400 fields missing: token
-- 400 user not found
-- 500 internal server error
-
-### Mettre à jour les résultats aux quiz après avoir fini un quiz (pour QuestionScreen)
-
-`PUT /quizResults`
-
-**Headers:** `authorization` (token)
-
-**Body:**
-
-```
-{
-    quizId: String,
-    score: Number,
-    passed: Boolean
-}
-```
-
-**Response:**
-
-Renvoie la liste actualisée
 
 ```
 {
@@ -247,30 +325,25 @@ Renvoie la liste actualisée
 
 **Errors:**
 
-- 400 fields missing: []
-- 400 user not found
-- 400 quiz not found
-- 500 internal server error
+- 400 Fields missing: token
+- 400 User not found
+- 500 Internal server error
 
-## favoritesRouter ('/favorites') -- Laura
+### Route pour mettre à jour les résultats aux quizz de l'utilisateur après avoir terminé un quiz
 
-### Route pour ajouter un restaurant aux favoris
+`PUT /quizResults`
 
-POST /favorites
-Req.body = id du restaurant
-Traitement : Mettre à jour User
-Res = result
+**Headers:** `authorization` (token)
 
-### Route pour supprimer un restaurant des favoris
+**Body:**
 
-DELETE /favorites
-Req.body = id du restaurant
-Traitement : Mettre à jour User
-Res = result
-
-## searchRouter ('/search') -- Morgan
-
-Routes pour afficher les restaurants trouvés en fonction des différents filtres de recherche et du "niveau de zoom" de la carte.
+```
+{
+    quizId: String,
+    score: Number,
+    passed: Boolean
+}
+```
 
 **Response:**
 
@@ -278,6 +351,100 @@ Routes pour afficher les restaurants trouvés en fonction des différents filtre
 {
     result: Boolean,
     data: [
+        {
+            _id: ObjectId,
+            score: Number,
+            passed: Boolean,
+            passedAt: Date
+        }
+    ]
+}
+```
+
+**Errors:**
+
+- 400 Fields missing: []
+- 400 User not found
+- 400 Quiz not found
+- 500 Internal server error
+
+## favoritesRouter ('/favorites')
+
+### Route pour ajouter un restaurant aux favoris de l'utilisateur
+
+`POST /favorites`
+
+**Headers:** `authorization` (token)
+
+**Body:**
+
+```
+{
+    restaurantId: String
+}
+```
+
+**Response:**
+
+```
+{
+    result: Boolean
+}
+```
+
+**Errors:**
+
+- 500 Internal server error
+
+### Route pour supprimer un restaurant des favoris de l'utilisateur
+
+`DELETE /favorites`
+
+**Headers:** `authorization` (token)
+
+**Body:**
+
+```
+{
+    restaurantId: String
+}
+```
+
+**Response:**
+
+```
+{
+    result: Boolean
+}
+```
+
+**Errors:**
+
+- 500 Internal server error
+
+## searchRouter ('/search')
+
+### Route pour chercher un restaurant par son nom
+
+`POST /search/restaurant`
+
+**Body:**
+
+```
+{
+    input: String,
+    badges: [String] | undefined,
+    types: [String] | undefined,
+    priceRange: String | undefined
+}
+```
+
+**Response:**
+
+```
+{
+    result: Boolean,
+    restaurants: [
         {
             _id: ObjectId,
             name: String,
@@ -300,49 +467,113 @@ Routes pour afficher les restaurants trouvés en fonction des différents filtre
 }
 ```
 
-### Route pour chercher un restaurant par son nom
+**Errors:**
 
-`POST /search/restaurant`
-
-```
-{
-    input: String,
-    badges: [String],
-    types: [String],
-    priceRange: String
-}
-```
+- 404 No restaurants match these criteria
+- 500 Internal server error
 
 ### Route pour chercher des restaurants dans une ville précise
 
 `POST /search/address`
 
+**Body:**
+
 ```
 {
     input: String,
-    badges: [String],   // optional
-    types: [String],   // optional
-    priceRange: String   // optional
+    badges: [String] | undefined,
+    types: [String] | undefined,
+    priceRange: String | undefined
 }
 ```
 
-### Route pour chercher un restaurant à proximité (du centre) d'une ville
+**Response:**
+
+```
+{
+    result: Boolean,
+    restaurants: [
+        {
+            _id: ObjectId,
+            name: String,
+            desc: String,
+            longDesc: String,
+            score: Number,
+            badges: [String],
+            types: [String],
+            priceRange: String,
+            address: String,
+            coordinates: {
+                latitude: Number,
+                longitude: Number,
+            },
+            imageUrl: String,
+            websiteUrl: String,
+            bookingUrl: String
+        }
+    ]
+}
+```
+
+**Errors:**
+
+- 404 No restaurants match these criteria
+- 500 Internal server error
+
+### Route pour chercher des restaurants à proximité d'une ville
 
 `POST /search/coordinates`
 
+**Body:**
+
 ```
 {
     input: String,
-    distance: String,
-    badges: [String],   // optional
-    types: [String],   // optional
-    priceRange: String   // optional
+    distance: String | undefined,
+    badges: [String] | undefined,
+    types: [String] | undefined,
+    priceRange: String | undefined
 }
 ```
 
-### Route pour chercher des restaurants autour de soi
+**Response:**
+
+```
+{
+    result: Boolean,
+    restaurants: [
+        {
+            _id: ObjectId,
+            name: String,
+            desc: String,
+            longDesc: String,
+            score: Number,
+            badges: [String],
+            types: [String],
+            priceRange: String,
+            address: String,
+            coordinates: {
+                latitude: Number,
+                longitude: Number,
+            },
+            imageUrl: String,
+            websiteUrl: String,
+            bookingUrl: String
+        }
+    ]
+}
+```
+
+**Errors:**
+
+- 404 No restaurants match these criteria
+- 500 Internal server error
+
+### Route pour chercher des restaurants autour de soi, en fonction de la géolocalisation de l'utilisateur
 
 `POST /search/geolocation`
+
+**Body:**
 
 ```
 {
@@ -350,9 +581,42 @@ Routes pour afficher les restaurants trouvés en fonction des différents filtre
         latitude: Number,
         longitude: Number,
     },
-    distance: String,   // optional
-    badges: [String],   // optional
-    types: [String],   // optional
-    priceRange: String   // optional
+    distance: String | undefined,
+    badges: [String] | undefined,
+    types: [String] | undefined,
+    priceRange: String | undefined
 }
 ```
+
+**Response:**
+
+```
+{
+    result: Boolean,
+    restaurants: [
+        {
+            _id: ObjectId,
+            name: String,
+            desc: String,
+            longDesc: String,
+            score: Number,
+            badges: [String],
+            types: [String],
+            priceRange: String,
+            address: String,
+            coordinates: {
+                latitude: Number,
+                longitude: Number,
+            },
+            imageUrl: String,
+            websiteUrl: String,
+            bookingUrl: String
+        }
+    ]
+}
+```
+
+**Errors:**
+
+- 404 No restaurants match these criteria
+- 500 Internal server error

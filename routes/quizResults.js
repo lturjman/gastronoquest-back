@@ -4,13 +4,13 @@ const User = require("../models/users");
 const Quiz = require("../models/quizzes");
 const { validateFields } = require("../middlewares/validateFields");
 
-// Route pour récupérer les résultats aux quizz d'un utilisateur
+// Route pour récupérer les résultats aux quizz de l'utilisateur
 router.get(
   "/",
   validateFields(["authorization"], "headers"),
   async (req, res) => {
     try {
-      // Récupération du token et recherche de l'utilisateur en bdd
+      // Récupération du token et recherche de l'utilisateur en BDD
       const token = req.headers.authorization;
       const user = await User.findOne({ token });
 
@@ -26,16 +26,16 @@ router.get(
   }
 );
 
-// Route pour mettre à jour les résultats aux quizz après avoir terminé un quiz
+// Route pour mettre à jour les résultats aux quizz de l'utilisateur après avoir terminé un quiz
 router.put(
   "/",
   validateFields(["authorization"], "headers"),
   validateFields(["quizId", "score", "passed"], "body"),
   async (req, res) => {
     try {
-      // Récupération du token et recherche de l'utilisateur en bdd
-      const { authorization } = req.headers;
-      const user = await User.findOne({ token: authorization });
+      // Récupération du token et recherche de l'utilisateur en BDD
+      const token = req.headers.authorization;
+      const user = await User.findOne({ token });
 
       // Répondre une erreur si aucun utilisateur trouvé
       if (!user) return res.status(400).json({ result: false, error: "User not found" });
@@ -84,10 +84,11 @@ router.put(
 
       // Mise à jour des résultats de quizz
       const result = await User.updateOne(
-        { token: authorization },
+        { token },
         { quizResults: newQuizResults }
       );
 
+      // Envoi des résultats
       if (result.modifiedCount === 1) {
         // Renvoie la nouvelle liste de résultats
         res.json({ result: true, data: newQuizResults });
@@ -95,8 +96,6 @@ router.put(
         // Erreur en cas d'échec de la mise à jour
         throw new Error("Update failed");
       }
-
-      // Envoi des résultats
     } catch (error) {
       console.error(error);
       res.status(500).json({ result: false, error: "Internal server error" });
