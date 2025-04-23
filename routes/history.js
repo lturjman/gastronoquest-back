@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/users");
 const { validateFields } = require("../middlewares/validateFields");
-const { calculateUserCo2Saved } = require("../services/calculateUserCo2Saved");
+const { calculateUserSavedCo2 } = require("../services/calculateUserSavedCo2");
 
 // GET /history : Récupérer l'historique des quêtes de l'utilisateur
 router.get(
@@ -58,9 +58,10 @@ router.post(
           .populate("quests.achievedChallenges", "title savedCo2 -_id");
 
         // Calcul de la somme du Co2 économisé lors de chaque quête
-        const totalSavedCo2 = calculateUserCo2Saved(user.quests);
+        const totalSavedCo2 = calculateUserSavedCo2(user.quests);
+        const level = calculateUserLevel(totalSavedCo2);
 
-        res.status(200).json({ result: true, totalSavedCo2 });
+        res.status(200).json({ result: true, totalSavedCo2, level });
       } else {
         res.status(500).json({ result: false, error: "Internal servor error" });
       }

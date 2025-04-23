@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/users");
 const { validateFields } = require("../middlewares/validateFields");
 const { calculateUserLevel } = require("../services/calculateUserLevel");
-const { calculateUserCo2Saved } = require("../services/calculateUserCo2Saved");
+const { calculateUserSavedCo2 } = require("../services/calculateUserSavedCo2");
 const uid2 = require("uid2");
 const bcrypt = require("bcrypt");
 
@@ -77,9 +77,9 @@ router.post(
 
       // Récupération des informations de l'utilisateur
       // Calcul du niveau de l'utilisateur et du CO2 économisé
-      const { username, token, favorites, quizResults, quests } = user;
-      const level = calculateUserLevel(quizResults);
-      const totalSavedCo2 = calculateUserCo2Saved(quests);
+      const { username, token, favorites, quests } = user;
+      const totalSavedCo2 = calculateUserSavedCo2(quests);
+      const level = calculateUserLevel(totalSavedCo2);
 
       // Préparation des données à retourner
       const data = {

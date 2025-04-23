@@ -1,6 +1,6 @@
 // Fonction pour calculer le CO2 économisé par un utilisateur
 
-const calculateUserCo2Saved = (quests) => {
+const calculateUserSavedCo2 = (quests) => {
   let totalSavedCo2 = 0;
 
   for (let quest of quests) {
@@ -14,4 +14,4 @@ const calculateUserCo2Saved = (quests) => {
   return totalSavedCo2;
 };
 
-module.exports = { calculateUserCo2Saved };
+module.exports = { calculateUserSavedCo2 };
