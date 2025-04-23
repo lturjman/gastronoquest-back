@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/users");
 const { validateFields } = require("../middlewares/validateFields");
 const { calculateUserSavedCo2 } = require("../services/calculateUserSavedCo2");
+const { calculateUserLevel } = require("../services/calculateUserLevel");
 
 // GET /history : Récupérer l'historique des quêtes de l'utilisateur
 router.get(
