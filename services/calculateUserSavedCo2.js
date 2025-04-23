@@ -9,7 +9,7 @@ const calculateUserSavedCo2 = (quests) => {
     }
   }
 
-  totalSavedCo2 = parseFloat(totalSavedCo2 / 100).toFixed(2);
+  totalSavedCo2 = Number(parseFloat(totalSavedCo2 / 100).toFixed(2));
 
   return totalSavedCo2;
 };

@@ -1,4 +1,4 @@
-// Fonction pour calculer le niveau d'un utilisateur
+// Fonction pour calculer le niveau d'un utilisateur, le prochain niveau à atteindre et la progression entre les deux niveaux
 
 const levelThresholds = [
   { level: "Jeune pousse", icon: "🌱", co2: 10 },
@@ -19,14 +19,15 @@ const calculateUserLevel = (co2) => {
       const nextLevel = {
         nextLevel: levelThresholds[i+1].level,
         icon: levelThresholds[i+1].icon,
-        remaining: levelThresholds[i].co2 - co2,
+        remaining: Number(parseFloat((levelThresholds[i].co2 * 100 - co2 * 100) / 100).toFixed(2)),
       };
       
       // Calcul du pourcentage de progression
       const previousThreshold = levelThresholds[i-1] ? levelThresholds[i-1].co2 : 0;
-      let progressPercentage = ((co2 - previousThreshold) / (currentLevel.co2 - previousThreshold)) * 100;
+      let progressPercentage = ((co2 * 100 - previousThreshold * 100) / (currentLevel.co2 * 100 - previousThreshold * 100)) * 100;
       progressPercentage = Math.min(Math.max(progressPercentage, 0), 100);
-      
+
+      totalSavedCo2 = parseFloat(totalSavedCo2 / 100).toFixed(2);
       return { currentLevel, nextLevel, progressPercentage };
     }
   }

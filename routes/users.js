@@ -11,10 +11,10 @@ const bcrypt = require("bcrypt");
 // Utilisation d'un middleware pour vérifier les champs nécessaires
 router.post(
   "/register",
-  validateFields(["username", "email", "password"], "body"),
+  validateFields(["username", "email", "password", "guest"], "body"),
   async (req, res) => {
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password, guest } = req.body;
 
       // Vérifier si l'utilisateur existe déjà
       const result = await User.findOne({ email });
@@ -30,22 +30,31 @@ router.post(
         email,
         password: hashedPassword,
         token,
-        favorites: [],
-        quests: [],
-        quizResults: [],
+        favorites: guest.favorite !== null ? [guest.favorite] : [],
+        quests: guest.quest !== null ? [guest.quest] : [],
+        quizResults: guest.quiz !== null ? [guest.quiz] : [],
       });
 
       await newUser.save();
 
       // Préparation des éléments à retourner pour insertion dans le store redux côté front
+      const user = await User.findOne({ token }).populate(
+        "quests.achievedChallenges favorites"
+      );
+      const { favorites, quests } = user;
+      
+      // Calcul du niveau de l'utilisateur et du CO2 économisé
+      const totalSavedCo2 = calculateUserSavedCo2(quests);
+      const level = calculateUserLevel(totalSavedCo2);
+
       const data = {
         firstConnection: true,
         username,
         email,
         token,
-        level: "jeune pousse",
-        totalSavedCo2: 0,
-        favorites: [],
+        level,
+        totalSavedCo2,
+        favorites,
       };
 
       res.status(201).json({ result: true, data });
