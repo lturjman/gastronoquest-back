@@ -43,7 +43,7 @@ router.post(
       const { favorites, quests } = user;
 
       // Calcul du niveau de l'utilisateur et du CO2 économisé
-      const totalSavedCo2 = calculateUserSavedCo2(quests);
+      const totalSavedCo2 = quests && quests.length > 0 ? calculateUserSavedCo2(quests) : 0;
       const level = calculateUserLevel(totalSavedCo2);
 
       // Préparation des éléments à retourner pour insertion dans le store Redux
