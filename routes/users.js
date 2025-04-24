@@ -18,7 +18,10 @@ router.post(
 
       // Vérifier si l'utilisateur existe déjà
       const result = await User.findOne({ email });
-      if (result) return res.status(400).json({ result: false, error: "Email already used" });
+      if (result)
+        return res
+          .status(400)
+          .json({ result: false, error: "Email already used" });
 
       // Création du token utilisateur et hash du mot de passe
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -37,13 +40,14 @@ router.post(
       await newUser.save();
 
       // Récupération des informations de l'utilisateur
-      const user = await User.findOne({ token }).populate(
-        "quests.achievedChallenges favorites"
-      );
+      const user = await User.findOne({ token })
+        .populate("quests.achievedChallenges favorites")
+        .lean(); // ajout d'un lean pour transformer la réponse en obj javascript et éviter une révocation de proxy (qui peut arriver avec populate)
       const { favorites, quests } = user;
 
       // Calcul du niveau de l'utilisateur et du CO2 économisé
-      const totalSavedCo2 = quests && quests.length > 0 ? calculateUserSavedCo2(quests) : 0;
+      const totalSavedCo2 =
+        quests && quests.length > 0 ? calculateUserSavedCo2(quests) : 0;
       const level = calculateUserLevel(totalSavedCo2);
 
       // Préparation des éléments à retourner pour insertion dans le store Redux
@@ -78,17 +82,22 @@ router.post(
       const user = await User.findOne({ email }).populate(
         "quests.achievedChallenges favorites"
       );
-      if (!user) return res.status(400).json({ result: false, error: "User not found" });
+      if (!user)
+        return res.status(400).json({ result: false, error: "User not found" });
 
       // Comparaison du mot de passe
       const isCorrectPassword = await bcrypt.compare(password, user.password);
-      if (!isCorrectPassword) return res.status(401).json({ result: false, error: "Invalid password" });
+      if (!isCorrectPassword)
+        return res
+          .status(401)
+          .json({ result: false, error: "Invalid password" });
 
       // Récupération des informations de l'utilisateur
       const { username, token, favorites, quests } = user;
 
-      // Calcul du niveau de l'utilisateur et du CO2 économisé
-      const totalSavedCo2 = calculateUserSavedCo2(quests);
+      // Calcul du niveau de l'utilisateur et du CO2 économisé uniquement s'il y a des quêtes
+      const totalSavedCo2 =
+        quests && quests.length > 0 ? calculateUserSavedCo2(quests) : 0;
       const level = calculateUserLevel(totalSavedCo2);
 
       // Préparation des éléments à retourner pour insertion dans le store Redux

@@ -21,9 +21,9 @@ router.get(
         ]);
 
       // Réponse
-      if (user === null) res.status(404).json({ result: false, error: "User not found" });
+      if (user === null)
+        res.status(404).json({ result: false, error: "User not found" });
       else res.status(200).json({ result: true, data: user.quests });
-
     } catch (error) {
       console.error(error);
       res.status(500).json({ result: false, error: "Internal servor error" });
@@ -43,7 +43,7 @@ router.post(
       const quest = {
         restaurant,
         achievedChallenges,
-        date: Date.now()
+        date: Date.now(),
       };
 
       // Ajout de la quête à l'historique de l'utilisateur
@@ -59,7 +59,10 @@ router.post(
           .populate("quests.achievedChallenges", "title savedCo2 -_id");
 
         // Calcul de la somme du Co2 économisé lors de chaque quête et du niveau de l'utilisateur
-        const totalSavedCo2 = calculateUserSavedCo2(user.quests);
+        const totalSavedCo2 =
+          user.quests && user.quests.length > 0
+            ? calculateUserSavedCo2(user.quests)
+            : 0;
         const level = calculateUserLevel(totalSavedCo2);
 
         res.status(200).json({ result: true, totalSavedCo2, level });
