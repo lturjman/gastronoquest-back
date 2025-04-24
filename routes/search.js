@@ -18,9 +18,8 @@ router.post(
       };
       const restaurants = await Restaurant.find(query).select("-__v");
 
-      // Réponse
-      if (restaurants.length === 0) res.status(404).json({ result: false, error: "No restaurants match these criteria" });
-      else res.status(200).json({ result: true, restaurants });
+      // Envoi des résultats
+      res.status(200).json({ result: true, restaurants });
 
     } catch (error) {
       console.error(error);
@@ -41,9 +40,8 @@ router.post(
       };
       const restaurants = await Restaurant.find(query).select("-__v");
 
-      // Réponse
-      if (restaurants.length === 0) res.status(404).json({ result: false, error: "No restaurants match these criteria" });
-      else res.status(200).json({ result: true, restaurants });
+      // Envoi des résultats
+      res.status(200).json({ result: true, restaurants });
 
     } catch (error) {
       console.error(error);
@@ -75,7 +73,7 @@ router.post(
       const query = constructQuery(req.body);
       const restaurants = await Restaurant.find(query).select("-__v");
 
-      if (restaurants.length === 0) return res.status(404).json({ result: false, error: "No restaurants match these criteria" });
+      if (restaurants.length === 0) return res.status(200).json({ result: true, restaurants });
 
       // Récupération des restaurants dans le radius
       const radius = parseInt(distance) * 1000;
@@ -89,9 +87,8 @@ router.post(
         ) === true
       );
 
-      // Réponse
-      if (restaurantsWithinRadius.length === 0) res.status(404).json({ result: false, error: "No restaurants match these criteria" });
-      else res.status(200).json({ result: true, restaurants: restaurantsWithinRadius });
+      // Envoi des résultats
+      res.status(200).json({ result: true, restaurants: restaurantsWithinRadius });
 
     } catch (error) {
       console.error(error);
@@ -111,7 +108,7 @@ router.post(
       const query = constructQuery(req.body);
       const restaurants = await Restaurant.find(query).select("-__v");
 
-      if (restaurants.length === 0) return res.status(404).json({ result: false });
+      if (restaurants.length === 0) return res.status(200).json({ result: true, restaurants });
 
       // Récupération des restaurants dans le radius
       const radius = parseInt(distance) * 1000;
@@ -124,9 +121,8 @@ router.post(
         ) === true
       );
 
-      // Réponse
-      if (restaurantsWithinRadius.length === 0) res.status(404).json({ result: false, error: "No restaurants match these criteria" });
-      else res.status(200).json({ result: true, restaurants: restaurantsWithinRadius });
+      // Envoi des résultats
+      res.status(200).json({ result: true, restaurants: restaurantsWithinRadius });
 
     } catch (error) {
       console.error(error);
