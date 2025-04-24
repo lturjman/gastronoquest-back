@@ -11,10 +11,10 @@ const { calculateUserSavedCo2 } = require("../services/calculateUserSavedCo2");
 // Utilisation d'un middleware pour vérifier les champs nécessaires
 router.post(
   "/register",
-  validateFields(["username", "email", "password", "guest"], "body"),
+  validateFields(["username", "email", "password"], "body"),
   async (req, res) => {
     try {
-      const { username, email, password, guest } = req.body;
+      const { username, email, password, favorite, quest, quiz } = req.body;
 
       // Vérifier si l'utilisateur existe déjà
       const result = await User.findOne({ email });
@@ -33,9 +33,9 @@ router.post(
         email,
         password: hashedPassword,
         token,
-        favorites: guest.favorite !== null ? [guest.favorite] : [],
-        quests: guest.quest !== null ? [guest.quest] : [],
-        quizResults: guest.quiz !== null ? [guest.quiz] : [],
+        favorites: favorite && favorite !== null ? [favorite] : [],
+        quests: quest && quest !== null ? [quest] : [],
+        quizResults: quiz && quiz !== null ? [quiz] : [],
       });
       await newUser.save();
 
