@@ -92,19 +92,18 @@
     username: String,
     email: String,
     password: String,
-    guest: {
-        favorite: String | null,
-        quiz: {
-            quizId: String,
-            score: Number,
-            passed: Boolean,
-            passedAt: Date
-        } | null,
-        quest: {
-            restaurant: String,
-            achievedChallenges: [String]
-        } | null
-    }
+    favorite: String | undefined,
+    quiz: {
+        quiz: String,
+        score: Number,
+        passed: Boolean,
+        passedAt: Date
+    } | undefined,
+    quest: {
+        restaurant: String,
+        date: Date,
+        achievedChallenges: [String]
+    } | undefined
 }
 ```
 
