@@ -16,7 +16,7 @@ router.get(
       const user = await User.findOne({ token })
         .select("quests -_id")
         .populate([
-          { path: "quests.restaurant", select: "name imageUrl -_id" },
+          "quests.restaurant",
           { path: "quests.achievedChallenges", select: "title savedCo2 -_id" },
         ]);
 
