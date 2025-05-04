@@ -47,7 +47,7 @@
 
 ### Route pour récupérer un quiz
 
-`GET /quiz/quizId`
+`GET /quiz/:quizId`
 
 **Response:**
 
@@ -254,7 +254,6 @@
 
 **Errors:**
 
-- 404 User not found
 - 500 Internal server error
 
 ### Route pour mettre à jour l'historique de l'utilisateur après validation d'une quête
@@ -468,7 +467,6 @@
 
 **Errors:**
 
-- 404 No restaurants match these criteria
 - 500 Internal server error
 
 ### Route pour chercher des restaurants dans une ville précise
@@ -516,7 +514,6 @@
 
 **Errors:**
 
-- 404 No restaurants match these criteria
 - 500 Internal server error
 
 ### Route pour chercher des restaurants à proximité d'une ville
@@ -565,7 +562,6 @@
 
 **Errors:**
 
-- 404 No restaurants match these criteria
 - 500 Internal server error
 
 ### Route pour chercher des restaurants autour de soi, en fonction de la géolocalisation de l'utilisateur
@@ -617,5 +613,4 @@
 
 **Errors:**
 
-- 404 No restaurants match these criteria
 - 500 Internal server error
