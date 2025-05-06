@@ -54,24 +54,20 @@
 ```
 {
     result: Boolean,
-    data: [
-        {
-            _id: ObjectId,
-            quizNumber: Number,
-            title: String,
-            difficulty: String,
-            questions: [
-                {
-                    questionNumber: Number,
-                    question: String,
-                    answers: [String],
-                    rightAnswer: String,
-                    comment: String,
-                    articleUrl: String
-                }
-            ]
-        }
-    ]
+    data: {
+        _id: ObjectId,
+        quizNumber: Number,
+        title: String,
+        difficulty: String,
+        questions: [{
+            questionNumber: Number,
+            question: String,
+            answers: [String],
+            rightAnswer: String,
+            comment: String,
+            articleUrl: String
+        }]
+    }
 }
 ```
 
@@ -198,26 +194,24 @@
             progressPercentage: Number
         },
         totalSavedCo2: Number,
-        favorites: [
-            {
-                _id: ObjectId,
-                name: String,
-                desc: String,
-                longDesc: String,
-                score: Number,
-                badges: [String],
-                types: [String],
-                priceRange: String,
-                address: String,
-                coordinates: {
-                    latitude: Number,
-                    longitude: Number,
-                },
-                imageUrl: String,
-                websiteUrl: String,
-                bookingUrl: String
-            }
-        ]
+        favorites: [{
+            _id: ObjectId,
+            name: String,
+            desc: String,
+            longDesc: String,
+            score: Number,
+            badges: [String],
+            types: [String],
+            priceRange: String,
+            address: String,
+            coordinates: {
+                latitude: Number,
+                longitude: Number,
+            },
+            imageUrl: String,
+            websiteUrl: String,
+            bookingUrl: String
+        }]
     }
 }
 ```
@@ -242,13 +236,11 @@
 ```
 {
     result: Boolean,
-    data: [
-        {
-            restaurant: ObjectId,
-            savedCo2: Number,
-            achievedChallenges: [ObjectId]
-        }
-    ]
+    data: [{
+        restaurant: ObjectId,
+        savedCo2: Number,
+        achievedChallenges: [ObjectId]
+    }]
 }
 ```
 
@@ -310,14 +302,12 @@
 ```
 {
     result: Boolean,
-    data: [
-        {
-            _id: ObjectId,
-            score: Number,
-            passed: Boolean,
-            passedAt: Date
-        }
-    ]
+    data: [{
+        _id: ObjectId,
+        score: Number,
+        passed: Boolean,
+        passedAt: Date
+    }]
 }
 ```
 
@@ -348,14 +338,12 @@
 ```
 {
     result: Boolean,
-    data: [
-        {
-            _id: ObjectId,
-            score: Number,
-            passed: Boolean,
-            passedAt: Date
-        }
-    ]
+    data: [{
+        _id: ObjectId,
+        score: Number,
+        passed: Boolean,
+        passedAt: Date
+    }]
 }
 ```
 
@@ -442,26 +430,24 @@
 ```
 {
     result: Boolean,
-    restaurants: [
-        {
-            _id: ObjectId,
-            name: String,
-            desc: String,
-            longDesc: String,
-            score: Number,
-            badges: [String],
-            types: [String],
-            priceRange: String,
-            address: String,
-            coordinates: {
-                latitude: Number,
-                longitude: Number,
-            },
-            imageUrl: String,
-            websiteUrl: String,
-            bookingUrl: String
-        }
-    ]
+    restaurants: [{
+        _id: ObjectId,
+        name: String,
+        desc: String,
+        longDesc: String,
+        score: Number,
+        badges: [String],
+        types: [String],
+        priceRange: String,
+        address: String,
+        coordinates: {
+            latitude: Number,
+            longitude: Number
+        },
+        imageUrl: String,
+        websiteUrl: String,
+        bookingUrl: String
+    }]
 }
 ```
 
@@ -489,26 +475,24 @@
 ```
 {
     result: Boolean,
-    restaurants: [
-        {
-            _id: ObjectId,
-            name: String,
-            desc: String,
-            longDesc: String,
-            score: Number,
-            badges: [String],
-            types: [String],
-            priceRange: String,
-            address: String,
-            coordinates: {
-                latitude: Number,
-                longitude: Number,
-            },
-            imageUrl: String,
-            websiteUrl: String,
-            bookingUrl: String
-        }
-    ]
+    restaurants: [{
+        _id: ObjectId,
+        name: String,
+        desc: String,
+        longDesc: String,
+        score: Number,
+        badges: [String],
+        types: [String],
+        priceRange: String,
+        address: String,
+        coordinates: {
+            latitude: Number,
+            longitude: Number
+        },
+        imageUrl: String,
+        websiteUrl: String,
+        bookingUrl: String
+    }]
 }
 ```
 
@@ -537,26 +521,24 @@
 ```
 {
     result: Boolean,
-    restaurants: [
-        {
-            _id: ObjectId,
-            name: String,
-            desc: String,
-            longDesc: String,
-            score: Number,
-            badges: [String],
-            types: [String],
-            priceRange: String,
-            address: String,
-            coordinates: {
-                latitude: Number,
-                longitude: Number,
-            },
-            imageUrl: String,
-            websiteUrl: String,
-            bookingUrl: String
-        }
-    ]
+    restaurants: [{
+        _id: ObjectId,
+        name: String,
+        desc: String,
+        longDesc: String,
+        score: Number,
+        badges: [String],
+        types: [String],
+        priceRange: String,
+        address: String,
+        coordinates: {
+            latitude: Number,
+            longitude: Number
+        },
+        imageUrl: String,
+        websiteUrl: String,
+        bookingUrl: String
+    }]
 }
 ```
 
@@ -588,26 +570,24 @@
 ```
 {
     result: Boolean,
-    restaurants: [
-        {
-            _id: ObjectId,
-            name: String,
-            desc: String,
-            longDesc: String,
-            score: Number,
-            badges: [String],
-            types: [String],
-            priceRange: String,
-            address: String,
-            coordinates: {
-                latitude: Number,
-                longitude: Number,
-            },
-            imageUrl: String,
-            websiteUrl: String,
-            bookingUrl: String
-        }
-    ]
+    restaurants: [{
+        _id: ObjectId,
+        name: String,
+        desc: String,
+        longDesc: String,
+        score: Number,
+        badges: [String],
+        types: [String],
+        priceRange: String,
+        address: String,
+        coordinates: {
+            latitude: Number,
+            longitude: Number
+        },
+        imageUrl: String,
+        websiteUrl: String,
+        bookingUrl: String
+    }]
 }
 ```
 
